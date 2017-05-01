@@ -1,0 +1,30 @@
+<%= content_tag :div,
+  id: "team-form",
+  data: {
+    id: team.id,
+    team: team.to_json(except: [:id, :created_at, :updated_at]),
+    players_attributes: team.players.to_json(except: [:team_id, :created_at, :updated_at]),
+  } do %>
+
+  <label>Team Name</label>
+  <input type="text" v-model="team.name" />
+
+  <h4>Players</h4>
+  <div v-for="(player, index) in team.players_attributes">
+    <div v-if="player._destroy == '1'">
+      {{ player.name }} will be removed. <button v-on:click="undoRemove(index)">Undo</button>
+    </div>
+    <div v-else>
+      <label>Player Name</label>
+      <input type="text" v-model="player.name" />
+      <button v-on:click="removePlayer(index)">Remove</button>
+    </div>
+
+    <hr />
+  </div>
+
+  <button v-on:click="addPlayer">Add Player</button>
+
+  <br />
+  <button v-on:click="saveTeam">Save Team</button>
+<% end %>
